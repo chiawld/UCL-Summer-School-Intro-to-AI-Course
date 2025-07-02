@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv('/Users/chicswldrg/Desktop/UZH 2024:25/Summer School Juli 2025/UCL-Summer-School-Intro-to-AI-Course-1/datasets/ai_adoption_dataset.csv')
 
+###################### EXPLORING THE DATA #######################################################################################################################
+
 # first 5 rows
 print(f"The first 5 rows of the dataset:")
 print(df.head())
@@ -27,6 +29,8 @@ print("\n")
 print("Data types for each column:")
 print(df.dtypes)
 print("\n")
+
+##################### CHECK FOR DUPLICATES, NULL VALUES, UNIQUE VALUES, OUTLIERS ###########################################################################################################
 
 # check for duplicates, and remove
 def remove_duplicates():
@@ -55,7 +59,6 @@ def find_unique_values():
             unique_values = df[column].unique()
             print(f"Unique values in '{column}': {unique_values}\n")
 
-### handle missing values - replace with 'Unknown'
 def handle_missing_values():
     df_filled = df.fillna('Unknown')
     print(f"\nAfter filling missing values with 'Unknown':")
@@ -63,9 +66,7 @@ def handle_missing_values():
     #print(f"Missing values: {df.isnull().sum().sum()}") # final check
 # alternative option to handle missing values: remove
 
-##################### VISUALISATION OF OUTLIERS ###################################################################################
-# Simple plots to visualise outliers in numerical data
-import matplotlib.pyplot as plt
+##################### VISUALISATION OF OUTLIERS ############################################################################################################
 
 # Create box plots for numerical columns to spot outliers
 numerical_cols = df.select_dtypes(include=[np.number]).columns
@@ -82,7 +83,7 @@ def boxplot_for_numerical_columns():
         plt.ylabel(col)
         plt.show()
 
-############ FINISH CLEANING DATA FILE ##################################################################################################
+############ FINISH CLEANING DATA FILE ###########################################################################################################################
 
 def clean_data_file():
     print(f"The dataset has {df.shape[0]} rows and {df.shape[1]} columns\n")
@@ -94,8 +95,8 @@ def clean_data_file():
 def visualise_data_file():
     boxplot_for_numerical_columns()
 
-#clean_data_file()
-#visualise_data_file()
+clean_data_file()
+visualise_data_file()
 
 # Save the cleaned DataFrame to a new CSV file
 df.to_csv('/Users/chicswldrg/Desktop/UZH 2024:25/Summer School Juli 2025/UCL-Summer-School-Intro-to-AI-Course-1/datasets/ai_adoption_dataset_cleaned.csv', index=False)
