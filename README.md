@@ -4,6 +4,8 @@ UCL Summer School - Artificial Intelligence: Concepts and Applications
 
 Course: 30. June - 18. July 2025
 
+Github: https://github.com/georginaalbadri/UCL_AI_Summer_School_2025.git
+
 ## Information
 Lecturer: Dr Georgina al-Badri (UCL), georgina.al-badri@ucl.ac.uk 
 Problem class leader: Adam Almakroudi,  almakroudi.adam@gmail.com
