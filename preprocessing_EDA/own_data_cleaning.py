@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('/Users/chicswldrg/Desktop/UZH 2024:25/Summer School Juli 2025/UCL-Summer-School-Intro-to-AI-Course-1/datasets/ai_adoption_dataset.csv')
+df = pd.read_csv('/Users/chicswldrg/Desktop/Summer School Juli 2025/UCL-Summer-School-Intro-to-AI-Course-1/datasets/ai_adoption_dataset.csv')
 
 ###################### EXPLORING THE DATA #######################################################################################################################
 
@@ -99,5 +99,5 @@ clean_data_file()
 visualise_data_file()
 
 # Save the cleaned DataFrame to a new CSV file
-df.to_csv('/Users/chicswldrg/Desktop/UZH 2024:25/Summer School Juli 2025/UCL-Summer-School-Intro-to-AI-Course-1/datasets/ai_adoption_dataset_cleaned.csv', index=False)
-print("\nCleaned dataset saved to 'ai_adoption_dataset_cleaned.csv'.")
+#df.to_csv('/Users/chicswldrg/Desktop/Summer School Juli 2025/UCL-Summer-School-Intro-to-AI-Course-1/datasets/ai_adoption_dataset_cleaned.csv', index=False)
+#print("\nCleaned dataset saved to 'ai_adoption_dataset_cleaned.csv'.")
