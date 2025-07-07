@@ -93,6 +93,44 @@ def prepare_data(x, y):
 
     return x_clean, y_clean
 
+# Identify categorical and numerical features
+categorical_features = x.select_dtypes(include=['object']).columns.tolist()
+numerical_features = x.select_dtypes(include=[np.number]).columns.tolist()
+
+print(f"\nCategorical features: {categorical_features}")
+print(f"Numerical features: {numerical_features}")
+
+# CHOOSE YOUR ENCODING METHOD HERE
+# Option 1: One-hot encoding (creates separate columns for each category)
+# Option 2: Label encoding (assigns numbers to categories)
+
+ENCODING_METHOD = "one_hot"  # Change to "label" for label encoding
+
+print(f"\n🔧 Using {ENCODING_METHOD} encoding for categorical features...")
+
+if ENCODING_METHOD == "one_hot":
+    # One-hot encoding: Good when you have few categories per feature
+    X_encoded = pd.get_dummies(x, columns=categorical_features, drop_first=True)
+    print(f"✓ One-hot encoding applied")
+    print(f"  Original features: {x.shape[1]}")
+    print(f"  After encoding: {X_encoded.shape[1]} features")
+    
+elif ENCODING_METHOD == "label":
+    # Label encoding: Good when you have many categories or ordinal data
+    X_encoded = x.copy()
+    label_encoders = {}
+    
+    for feature in categorical_features:
+        le = LabelEncoder()
+        X_encoded[feature] = le.fit_transform(X[feature].astype(str))
+        label_encoders[feature] = le
+        print(f"  {feature}: {len(le.classes_)} categories → 0 to {len(le.classes_)-1}")
+    
+    print(f"✓ Label encoding applied")
+    print(f"  Features remain: {X_encoded.shape[1]} (same as original)")
+
+print(f"\nNew feature names: {list(X_encoded.columns)}")
+
 x_clean, y_clean = prepare_data(x, y)
 
 ######################## SPLIT DATA INTO TRAINING AND TEST SETS ################################################################################################
