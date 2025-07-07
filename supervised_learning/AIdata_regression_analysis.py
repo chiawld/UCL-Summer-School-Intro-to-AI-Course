@@ -64,34 +64,14 @@ check_validity_choices()
 check_missing_ft()
 
 ############################### PREPARE DATA FOR MACHINE LEARNING ################################################################################################
+# Create our target (Y) and features (X)
 y = df[target_column]  # What we want to predict
 x = df[feature_columns]  # What we'll use to predict
 
-def prepare_data(x, y):
-    # Create target (Y) and features (X)
-
-    print("Data before preparation:")
-    print(f"Target shape: {y.shape}")
-    print(f"Features shape: {x.shape}")
-    print(f"Features data types:\n{x.dtypes}")
-
-    # Convert text columns to numbers (one-hot encoding)
-    x_prepared = pd.get_dummies(x, drop_first=True)
-
-    print(f"\nData after preparation:")
-    print(f"Features shape: {x_prepared.shape}")
-    print(f"New column names: {list(x_prepared.columns)}")
-
-    # Remove any rows with missing values
-    mask = ~(x_prepared.isnull().any(axis=1) | y.isnull())
-    x_clean = x_prepared[mask]
-    y_clean = y[mask]
-
-    print(f"\nAfter removing missing values:")
-    print(f"Final dataset size: {len(x_clean)} rows")
-    print(f"Features: {x_clean.shape[1]} columns")
-
-    return x_clean, y_clean
+print("Data before preparation:")
+print(f"Target shape: {y.shape}")
+print(f"Features shape: {x.shape}")
+print(f"Features data types:\n{x.dtypes}")
 
 # Identify categorical and numerical features
 categorical_features = x.select_dtypes(include=['object']).columns.tolist()
@@ -131,7 +111,60 @@ elif ENCODING_METHOD == "label":
 
 print(f"\nNew feature names: {list(X_encoded.columns)}")
 
-x_clean, y_clean = prepare_data(x, y)
+# STEP 2: Feature Scaling (Normalization)
+# This ensures all features are on similar scales (important for Linear Regression!)
+
+APPLY_SCALING = True  # Change to False if you don't want scaling
+
+if APPLY_SCALING:
+    print("🔧 APPLYING FEATURE SCALING")
+    print("=" * 40)
+    
+    # Show feature ranges before scaling (only for numerical features)
+    print("Feature statistics BEFORE scaling:")
+    
+    # For one-hot encoded data, show value counts instead of ranges
+    if ENCODING_METHOD == "one_hot":
+        print(f"One-hot encoded features: {x_clean.shape[1]} binary columns")
+        print(f"Data type: {x_clean.dtypes.iloc[0]} (0s and 1s)")
+        print(f"Sample feature values: {x_clean.iloc[0].sum()} features = 1 for first row")
+    else:
+        # For label encoded data, we can show ranges
+        feature_ranges_before = x_clean.max() - x_clean.min()
+        print("Feature ranges:")
+        print(feature_ranges_before.describe())
+    
+    # Apply StandardScaler (mean=0, std=1)
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X_clean)
+    X_scaled = pd.DataFrame(X_scaled, columns=x_clean.columns, index=x_clean.index)
+
+    # Show feature statistics after scaling
+    print(f"\nFeature statistics AFTER scaling:")
+    print(f"Mean values (should be ≈ 0): {X_scaled.mean().mean():.6f}")
+    print(f"Standard deviation (should be ≈ 1): {X_scaled.std().mean():.6f}")
+    feature_ranges_after = X_scaled.max() - X_scaled.min()
+    print(f"Average range after scaling: {feature_ranges_after.mean():.3f}")
+    
+    print(f"\n✓ Feature scaling applied!")
+    print(f"  All features now have mean ≈ 0 and std ≈ 1")
+    print(f"  This helps Linear Regression perform better")
+    
+    # Use scaled features
+    X_final = X_scaled
+    
+    else:
+        print("⚠️  Skipping feature scaling")
+        if ENCODING_METHOD == "one_hot":
+            print("Note: One-hot encoded features are already 0/1, scaling less critical")
+        else:
+            print("Note: Linear Regression may perform poorly with unscaled features")
+        X_final = X_clean
+
+print(f"\n📊 FINAL PREPARED DATA:")
+print(f"Features shape: {x_final.shape}")
+print(f"Target shape: {y_clean.shape}")
+print(f"Ready for machine learning!")
 
 ######################## SPLIT DATA INTO TRAINING AND TEST SETS ################################################################################################
 
